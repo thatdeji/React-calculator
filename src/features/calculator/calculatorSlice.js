@@ -54,7 +54,7 @@ export const calculatorSlice = createSlice({
         operatorStatus: "is-clicked-again"
       };
     },
-    evaluateResult: (state, { payload }) => {
+    resultEvaluate: (state, { payload }) => {
       const { history, result } = state;
       if (result.nextIndex === 0) {
         return {
@@ -78,28 +78,29 @@ export const calculatorSlice = createSlice({
           nextIndex: history.length - 1
         }
       };
-      console.log(
-        history.substr(0, history.length - 1).split(""),
-        history.length
-      );
-    }
+    },
+    resultDisplay: (state, { payload }) => ({ ...state, output: payload })
   }
 });
 
 export const selectOutput = state => state.calculator.output;
 export const selectHistory = state => state.calculator.history;
 export const selectOperatorStatus = state => state.calculator.operatorStatus;
+export const selectResult = state => state.calculator.result;
 
 export const {
   numberClick,
   operatorClickOnce,
   operatorClickAgain,
-  evaluateResult
+  resultEvaluate,
+  resultDisplay
 } = calculatorSlice.actions;
 
 export const computeValues = (value, type) => (dispatch, getState) => {
   const operatorStatus = selectOperatorStatus(getState());
-  // console.log(operatorStatus);
+  const result = selectResult(getState());
+  const history = selectHistory(getState());
+  const output = selectOutput(getState());
   switch (type) {
     case "number":
       dispatch(numberClick(value));
@@ -109,7 +110,7 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         return;
       } else if (operatorStatus === "is-not-clicked") {
         dispatch(operatorClickOnce(value));
-        dispatch(evaluateResult());
+        dispatch(resultEvaluate());
       } else if (
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
@@ -119,12 +120,20 @@ export const computeValues = (value, type) => (dispatch, getState) => {
       break;
     case "equals":
       if (operatorStatus === "is-not-clicked") {
-        dispatch(evaluateResult("all"));
+        dispatch(
+          resultDisplay(
+            calculateByOperator([
+              result.current,
+              history[history.length - 1],
+              output
+            ])
+          )
+        );
       } else if (
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
       ) {
-        dispatch(evaluateResult());
+        dispatch(resultDisplay(result.current));
       }
       break;
     default:
