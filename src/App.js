@@ -6,7 +6,12 @@ function App() {
   return (
     <div className="App">
       <div className="calculator">
-        <div className="display">ss</div>
+        <div id="display" className="display">
+          <div className="display__container">
+            <div className="history">308 x 42</div>
+            <div className="output">12,936</div>
+          </div>
+        </div>
         <div className="operators">
           {buttons.map(({ id, colorType, value }) => (
             <Button colorType={colorType} id={id} key={id}>

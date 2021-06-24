@@ -38,6 +38,20 @@ body {
 }
 .display {
   height: 40%;
+  padding: 40px;
+  color: var(--button-color-primary);
+  text-align: right;
+  position: relative;
+}
+.display__container {
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+  left: 20px;
+}
+.output {
+  font-size: 40px;
+  font-weight: 600;
 }
 .operators {
   height: 60%;
