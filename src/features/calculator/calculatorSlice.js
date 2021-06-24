@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   history: "",
-  output: ""
+  output: "12,936"
 };
 
 export const calculatorSlice = createSlice({
