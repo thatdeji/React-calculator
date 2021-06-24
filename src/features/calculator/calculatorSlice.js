@@ -1,9 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const calculateByOperator = expression => {
+  if (expression.length === 1) return;
+  const [operand1, operator, operand2] = expression;
+  if (operator === "+") return Number(operand1) + Number(operand2);
+  if (operator === "-") return Number(operand1) - Number(operand2);
+  if (operator === "÷") return Number(operand1) / Number(operand2);
+  if (operator === "x") return Number(operand1) * Number(operand2);
+  if (operator === "%") return Number(operand1) % Number(operand2);
+};
+
 const initialState = {
-  history: " ",
+  history: "",
   output: "",
-  operatorStatus: "init"
+  operatorStatus: "init",
+  result: {
+    current: "",
+    nextIndex: 0
+  }
 };
 
 export const calculatorSlice = createSlice({
@@ -16,7 +30,7 @@ export const calculatorSlice = createSlice({
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
           ? payload
-          : state.output + payload;
+          : output + payload;
       return {
         ...state,
         output: newOutput,
@@ -25,24 +39,49 @@ export const calculatorSlice = createSlice({
     },
     operatorClickOnce: (state, { payload }) => {
       const { history, output } = state;
-      // const newHistory = typeof history && '';
-      // history: `${isNaN(history[history.length - 1])
-      //   ? history.substr(0, history.length - 1) + payload
-      //   : output + payload}`,
-      console.log(history[history.length - 1]);
       return {
         ...state,
         history: history + output + payload,
-        operatorStatus: "is-clicked-once"
+        operatorStatus: "is-clicked-once",
+        operationReady: true
       };
     },
     operatorClickAgain: (state, { payload }) => {
-      const { history, output } = state;
+      const { history } = state;
       return {
         ...state,
         history: history.substr(0, history.length - 1) + payload,
         operatorStatus: "is-clicked-again"
       };
+    },
+    evaluateResult: (state, { payload }) => {
+      const { history, result } = state;
+      if (result.nextIndex === 0) {
+        return {
+          ...state,
+          result: {
+            ...state.result,
+            current: history.substr(0, history.length - 1),
+            nextIndex: history.length - 1
+          }
+        };
+      }
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          current: calculateByOperator([
+            result.current,
+            history[result.nextIndex],
+            history[result.nextIndex + 1]
+          ]),
+          nextIndex: history.length - 1
+        }
+      };
+      console.log(
+        history.substr(0, history.length - 1).split(""),
+        history.length
+      );
     }
   }
 });
@@ -54,11 +93,13 @@ export const selectOperatorStatus = state => state.calculator.operatorStatus;
 export const {
   numberClick,
   operatorClickOnce,
-  operatorClickAgain
+  operatorClickAgain,
+  evaluateResult
 } = calculatorSlice.actions;
 
 export const computeValues = (value, type) => (dispatch, getState) => {
   const operatorStatus = selectOperatorStatus(getState());
+  // console.log(operatorStatus);
   switch (type) {
     case "number":
       dispatch(numberClick(value));
@@ -68,12 +109,22 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         return;
       } else if (operatorStatus === "is-not-clicked") {
         dispatch(operatorClickOnce(value));
+        dispatch(evaluateResult());
       } else if (
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
       ) {
-        console.log(selectOperatorStatus(getState()), type);
         dispatch(operatorClickAgain(value));
+      }
+      break;
+    case "equals":
+      if (operatorStatus === "is-not-clicked") {
+        dispatch(evaluateResult("all"));
+      } else if (
+        operatorStatus === "is-clicked-once" ||
+        operatorStatus === "is-clicked-again"
+      ) {
+        dispatch(evaluateResult());
       }
       break;
     default:
