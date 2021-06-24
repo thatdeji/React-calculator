@@ -9,7 +9,8 @@ const initialState = {
     current: "",
     nextIndex: 0
   },
-  negate: false
+  negate: false,
+  decimal: false
 };
 
 export const calculatorSlice = createSlice({
@@ -35,7 +36,8 @@ export const calculatorSlice = createSlice({
         ...state,
         history: history + output + payload,
         operatorStatus: "is-clicked-once",
-        operationReady: true
+        operationReady: true,
+        decimal: true
       };
     },
     operatorClickAgain: (state, { payload }) => {
@@ -58,7 +60,6 @@ export const calculatorSlice = createSlice({
           }
         };
       }
-      console.log(history.slice(result.nextIndex + 1, history.length));
       return {
         ...state,
         result: {
@@ -74,11 +75,44 @@ export const calculatorSlice = createSlice({
     },
     resultDisplay: (state, { payload }) => ({
       ...state,
+      history: "",
       output: payload,
-      result: { ...state.result, current: payload }
+      operatorStatus: "is-result-done",
+      result: {
+        ...state.result,
+        current: payload,
+        nextIndex: 0
+      }
     }),
-    negateOutput: state => {
-      return { ...state, output: `-${state.output}` };
+    outputNegate: state => {
+      const { output, negate } = state;
+      const newOutput = negate
+        ? `${output.substring(1, output.length)}`
+        : `-${output}`;
+      return { ...state, output: newOutput, negate: !negate };
+    },
+    outputDecimal: state => {
+      const { output, decimal } = state;
+      if (!decimal) return { ...state, output: `${output}.`, decimal: true };
+      return state;
+    },
+    calculatorReset: state => ({
+      ...state,
+      history: "",
+      output: "",
+      operatorStatus: "init",
+      result: {
+        current: "",
+        nextIndex: 0
+      },
+      negate: false
+    }),
+    outputBackspace: state => {
+      let { output } = state;
+      output = String(output);
+      const newOutput =
+        output !== "" ? output.substring(0, output.length - 1) : output;
+      return { ...state, output: newOutput };
     }
   }
 });
@@ -94,7 +128,10 @@ export const {
   operatorClickAgain,
   resultEvaluate,
   resultDisplay,
-  negateOutput
+  outputNegate,
+  calculatorReset,
+  outputDecimal,
+  outputBackspace
 } = calculatorSlice.actions;
 
 export const computeValues = (value, type) => (dispatch, getState) => {
@@ -117,10 +154,14 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         operatorStatus === "is-clicked-again"
       ) {
         dispatch(operatorClickAgain(value));
+      } else if (operatorStatus === "is-result-done") {
+        console.log("done");
+        dispatch(operatorClickOnce(value));
       }
       break;
     case "equals":
       if (operatorStatus === "is-not-clicked") {
+        if (result.current === "") return;
         dispatch(
           resultDisplay(
             calculateByOperator([
@@ -138,7 +179,16 @@ export const computeValues = (value, type) => (dispatch, getState) => {
       }
       break;
     case "negate":
-      dispatch(negateOutput());
+      dispatch(outputNegate());
+      break;
+    case "clear":
+      dispatch(calculatorReset());
+      break;
+    case "decimal":
+      dispatch(outputDecimal());
+      break;
+    case "backspace":
+      dispatch(outputBackspace());
       break;
     default:
       return;
