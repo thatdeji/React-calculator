@@ -1,14 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const calculateByOperator = expression => {
-  if (expression.length === 1) return;
-  const [operand1, operator, operand2] = expression;
-  if (operator === "+") return Number(operand1) + Number(operand2);
-  if (operator === "-") return Number(operand1) - Number(operand2);
-  if (operator === "÷") return Number(operand1) / Number(operand2);
-  if (operator === "x") return Number(operand1) * Number(operand2);
-  if (operator === "%") return Number(operand1) % Number(operand2);
-};
+import { calculateByOperator } from "../../utils";
 
 const initialState = {
   history: "",
@@ -17,7 +8,8 @@ const initialState = {
   result: {
     current: "",
     nextIndex: 0
-  }
+  },
+  negate: false
 };
 
 export const calculatorSlice = createSlice({
@@ -66,6 +58,7 @@ export const calculatorSlice = createSlice({
           }
         };
       }
+      console.log(history.slice(result.nextIndex + 1, history.length));
       return {
         ...state,
         result: {
@@ -73,13 +66,20 @@ export const calculatorSlice = createSlice({
           current: calculateByOperator([
             result.current,
             history[result.nextIndex],
-            history[result.nextIndex + 1]
+            history.slice(result.nextIndex + 1, history.length - 1)
           ]),
           nextIndex: history.length - 1
         }
       };
     },
-    resultDisplay: (state, { payload }) => ({ ...state, output: payload })
+    resultDisplay: (state, { payload }) => ({
+      ...state,
+      output: payload,
+      result: { ...state.result, current: payload }
+    }),
+    negateOutput: state => {
+      return { ...state, output: `-${state.output}` };
+    }
   }
 });
 
@@ -93,7 +93,8 @@ export const {
   operatorClickOnce,
   operatorClickAgain,
   resultEvaluate,
-  resultDisplay
+  resultDisplay,
+  negateOutput
 } = calculatorSlice.actions;
 
 export const computeValues = (value, type) => (dispatch, getState) => {
@@ -135,6 +136,9 @@ export const computeValues = (value, type) => (dispatch, getState) => {
       ) {
         dispatch(resultDisplay(result.current));
       }
+      break;
+    case "negate":
+      dispatch(negateOutput());
       break;
     default:
       return;
