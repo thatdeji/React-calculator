@@ -1,0 +1,42 @@
+.App {
+  background-color: #000;
+  color: #fff;
+  height: 500px;
+  width: 250px;
+  border-radius: 20px;
+  padding: 20px;
+  -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.86);
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.display {
+  height: 30%;
+  text-align: right;
+  font-size: 3em;
+  padding-top: 50px;
+}
+
+.display.reduce {
+  font-size: 1.5em;
+}
+
+.display.reduce-more {
+  font-size: 1em;
+}
+
+.buttons {
+  height: 70%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-gap: 10px;
+  padding-bottom: 50px;
+}
+
+@media only screen and (max-width: 261px) {
+  .App {
+    width: 100vw;
+    padding: 5px;
+  }
+}
