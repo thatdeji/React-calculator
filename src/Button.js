@@ -1,10 +1,10 @@
 import "./button.css";
 
-const Button = ({ colorType, children, id, onClick }) => {
+const Button = ({ colorType, children, id, onClick, type }) => {
   return (
     <button
       onClick={e => {
-        onClick(e.target.textContent);
+        onClick(e.target.textContent, type);
       }}
       id={id}
       className={`button button--${colorType}`}
