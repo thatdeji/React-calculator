@@ -1,6 +1,10 @@
 :root {
   --calculator-bg: #22252d;
   --operator-bg: #2a2d37;
+  --button-bg: #282b33;
+  --button-color-primary: #fafafd;
+  --button-color-secondary-one: #3cd9bd;
+  --button-color-secondary-two: #d07176;
 }
 * {
   margin: 0;

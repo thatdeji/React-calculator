@@ -1,0 +1,16 @@
+.button {
+  background-color: var(--button-bg);
+  outline: 0;
+  border: 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+.button--primary {
+  color: var(--button-color-primary);
+}
+.button--secondary-one {
+  color: var(--button-color-secondary-one);
+}
+.button--secondary-two {
+  color: var(--button-color-secondary-two);
+}
