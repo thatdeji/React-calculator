@@ -1,4 +1,5 @@
 import "./toggle.css";
+import { useSelector, useDispatch } from "react-redux";
 
 const Toggle = () => {
   return (

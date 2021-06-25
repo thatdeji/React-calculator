@@ -12,6 +12,8 @@ const toggleSlice = createSlice({
   }
 });
 
+export const toggleSelector = state => state.toggle;
+
 export const {toggleClick} = toggleSlice.actions;
 
 export default toggleSlice.reducer;
