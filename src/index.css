@@ -41,15 +41,16 @@ body {
   align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
+  padding: 10px;
 }
 .calculator-container {
   height: 500px;
   min-height: 500px;
-  width: 260px;
+  width: 270px;
   border-radius: 20px;
   background-color: var(--calculator-bg);
 }
-@media screen and (max-width: 270px) {
+@media screen and (max-width: 280px) {
   .calculator-container {
     width: 200px;
   }

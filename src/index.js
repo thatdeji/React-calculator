@@ -5,10 +5,6 @@ import App from "./App";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 
-store.subscribe(() => {
-  console.log(store.getState().calculator.result);
-});
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
