@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./Button";
 import { buttons } from "./data/buttons";
 import {
-  selectOutput,
+  selectPreciseOutput,
   selectHistory,
   numberClick,
   outputNegate,
@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 function App() {
   const dispatch = useDispatch();
-  const output = useSelector(selectOutput);
+  const output = useSelector(selectPreciseOutput);
   const history = useSelector(selectHistory);
 
   const handleClick = (value, type) => {
@@ -41,7 +41,6 @@ function App() {
       default:
         return;
     }
-    // dispatch(computeValues(value, type));
   };
   return (
     <div className="App">

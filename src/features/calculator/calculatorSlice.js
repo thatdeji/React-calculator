@@ -137,10 +137,13 @@ export const calculatorSlice = createSlice({
   }
 });
 
-export const selectOutput = state => state.calculator.output;
+export const selectCalculator = state => state.calculator;
+export const selectPreciseOutput = state => {
+  const { output } = state.calcuator;
+  const newOutput = output === "" ? 0 : Number(state.calculator.output);
+  parseFloat(newOutput).toFixed(4);
+};
 export const selectHistory = state => state.calculator.history;
-export const selectOperatorStatus = state => state.calculator.operatorStatus;
-export const selectResult = state => state.calculator.result;
 
 export const {
   numberClick,
@@ -154,7 +157,7 @@ export const {
 } = calculatorSlice.actions;
 
 export const computeOperatorValue = value => (dispatch, getState) => {
-  const operatorStatus = selectOperatorStatus(getState());
+  const { operatorStatus } = selectCalculator(getState());
   if (operatorStatus === "init") {
     return;
   } else if (operatorStatus === "is-not-clicked") {
@@ -171,10 +174,9 @@ export const computeOperatorValue = value => (dispatch, getState) => {
 };
 
 export const computeEqual = () => (dispatch, getState) => {
-  const operatorStatus = selectOperatorStatus(getState());
-  const output = selectOutput(getState());
-  const result = selectResult(getState());
-  const history = selectHistory(getState());
+  const { operatorStatus, output, result, history } = selectCalculator(
+    getState()
+  );
   if (operatorStatus === "is-not-clicked") {
     if (result.current === "") return;
     dispatch(
