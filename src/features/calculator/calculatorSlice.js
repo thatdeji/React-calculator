@@ -92,7 +92,7 @@ export const calculatorSlice = createSlice({
         nextIndex: String(payload).length
       }
     }),
-    outputNegate: state => {
+    negateClick: state => {
       const { output, result: { current }, operatorStatus } = state;
       //is result calculated? multiply current result by -1 else return current result
       const newCurrent = operatorStatus === "is-ready" ? -1 * current : current;
@@ -102,7 +102,7 @@ export const calculatorSlice = createSlice({
         result: { ...state.result, current: newCurrent }
       };
     },
-    outputDecimal: state => {
+    decimalClick: state => {
       const { output } = state;
       //adds decimal if decimal is not in the output
       if (String(output).indexOf(".") === -1)
@@ -110,7 +110,7 @@ export const calculatorSlice = createSlice({
       //adds nothing when decimal has been added to the output
       return state;
     },
-    outputBackspace: state => {
+    backspaceClick: state => {
       const { output } = state;
       const newOutput = String(output);
       //takes the output excluding it's new output as the new one
@@ -143,10 +143,10 @@ export const {
   operatorClickAgain,
   resultEvaluate,
   resultDisplay,
-  outputNegate,
+  negateClick,
   calculatorReset,
-  outputDecimal,
-  outputBackspace
+  decimalClick,
+  backspaceClick
 } = calculatorSlice.actions;
 
 //Redux synchronous Thunks

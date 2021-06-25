@@ -5,10 +5,10 @@ import {
   selectOutput,
   selectHistory,
   numberClick,
-  outputNegate,
+  negateClick,
   calculatorReset,
-  outputDecimal,
-  outputBackspace,
+  decimalClick,
+  backspaceClick,
   computeOperatorThunk,
   computeEqualThunk
 } from "./calculatorSlice";
@@ -32,16 +32,16 @@ function Calculator() {
         dispatch(computeEqualThunk());
         break;
       case "negate":
-        dispatch(outputNegate());
+        dispatch(negateClick());
         break;
       case "clear":
         dispatch(calculatorReset());
         break;
       case "decimal":
-        dispatch(outputDecimal());
+        dispatch(decimalClick());
         break;
       case "backspace":
-        dispatch(outputBackspace());
+        dispatch(backspaceClick());
         break;
       default:
         return;
