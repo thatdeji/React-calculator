@@ -8,6 +8,7 @@ import {
   outputNegate,
   calculatorReset,
   outputDecimal,
+  outputBackspace,
   computeOperatorThunk,
   computeEqualThunk
 } from "./calculatorSlice";
@@ -39,6 +40,8 @@ function Calculator() {
       case "decimal":
         dispatch(outputDecimal());
         break;
+      case "backspace":
+        dispatch(outputBackspace());
       default:
         return;
     }

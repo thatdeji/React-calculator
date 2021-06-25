@@ -96,6 +96,12 @@ export const buttons = [
     type: "operator"
   },
   {
+    value: "CE",
+    id: "backspace",
+    colorType: "primary",
+    type: "backspace"
+  },
+  {
     value: "0",
     id: "zero",
     colorType: "primary",

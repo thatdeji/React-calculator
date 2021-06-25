@@ -110,6 +110,14 @@ export const calculatorSlice = createSlice({
       //adds nothing when decimal has been added to the output
       return state;
     },
+    outputBackspace: state => {
+      const { output } = state;
+      const newOutput = String(output);
+      return {
+        ...state,
+        output: newOutput.substr(0, newOutput.length - 1)
+      };
+    },
     calculatorReset: state => ({
       ...state,
       history: "",
@@ -136,7 +144,8 @@ export const {
   resultDisplay,
   outputNegate,
   calculatorReset,
-  outputDecimal
+  outputDecimal,
+  outputBackspace
 } = calculatorSlice.actions;
 
 //Redux synchronous Thunks
