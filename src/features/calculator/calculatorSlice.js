@@ -153,6 +153,45 @@ export const {
   outputDecimal
 } = calculatorSlice.actions;
 
+export const computeOperatorValues = (value, type) => (dispatch, getState) => {
+  const operatorStatus = selectOperatorStatus(getState());
+  if (operatorStatus === "init") {
+    return;
+  } else if (operatorStatus === "is-not-clicked") {
+    dispatch(operatorClickOnce(value));
+    dispatch(resultEvaluate());
+  } else if (
+    operatorStatus === "is-clicked-once" ||
+    operatorStatus === "is-clicked-again"
+  ) {
+    dispatch(operatorClickAgain(value));
+  } else if (operatorStatus === "is-ready") {
+    dispatch(operatorClickOnce(value));
+  }
+};
+
+export const computeEqual = (value, type) => (dispatch, getState) => {
+  const result = selectResult(getState());
+  const history = selectHistory(getState());
+  if (operatorStatus === "is-not-clicked") {
+    if (result.current === "") return;
+    dispatch(
+      resultDisplay(
+        calculateByOperator([
+          result.current,
+          history[history.length - 1],
+          output
+        ])
+      )
+    );
+  } else if (
+    operatorStatus === "is-clicked-once" ||
+    operatorStatus === "is-clicked-again"
+  ) {
+    dispatch(resultDisplay(result.current));
+  }
+};
+
 export const computeValues = (value, type) => (dispatch, getState) => {
   const operatorStatus = selectOperatorStatus(getState());
   const result = selectResult(getState());
