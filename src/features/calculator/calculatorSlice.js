@@ -18,7 +18,7 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     numberClick: (state, { payload }) => {
-      let { output, zero, operatorStatus, result } = state;
+      const { output, zero, operatorStatus, result } = state;
       const newOutput =
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
@@ -33,15 +33,18 @@ export const calculatorSlice = createSlice({
           zero: false
         };
       //concantenates output to result when result has been calculated
-      if (operatorStatus === "is-ready") {
-        output += payload;
-        operatorStatus = "is-ready";
-        zero = true;
-        result = {
-          current: output + payload,
-          nextIndex: result.nextIndex + 1
+      if (operatorStatus === "is-ready")
+        return {
+          ...state,
+          output: output + payload,
+          operatorStatus: "is-ready",
+          zero: true,
+          result: {
+            ...state.result,
+            current: output + payload,
+            nextIndex: result.nextIndex + 1
+          }
         };
-      }
       //default display
       return {
         ...state,
