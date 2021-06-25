@@ -121,11 +121,11 @@ export const calculatorSlice = createSlice({
     })
   }
 });
-
+//selectors
 export const selectCalculator = state => state.calculator;
 export const selectOutput = state => state.calculator.output;
 export const selectHistory = state => state.calculator.history;
-
+//actiions
 export const {
   numberClick,
   operatorClickOnce,
@@ -137,17 +137,20 @@ export const {
   outputDecimal
 } = calculatorSlice.actions;
 
-//Thunks
-
+//Redux Thunks
 export const computeOperatorThunk = value => (dispatch, getState) => {
   const { operatorStatus, result: { current, nextIndex } } = selectCalculator(
     getState()
   );
+  //return at initial state or when state is reset
   if (operatorStatus === "init") {
     return;
   } else if (operatorStatus === "is-not-clicked") {
+    //when operator has not been clicked show operator & calculate the previous inputs
     dispatch(operatorClickOnce(value));
+    //get recent history state
     const history = selectHistory(getState());
+    //calcualtes result based on the previous inputs
     const resultEval =
       !nextIndex && !current
         ? history.substr(0, history.length - 1)
@@ -161,8 +164,10 @@ export const computeOperatorThunk = value => (dispatch, getState) => {
     operatorStatus === "is-clicked-once" ||
     operatorStatus === "is-clicked-again"
   ) {
+    //update previous operator when clicked once and above
     dispatch(operatorClickAgain(value));
   } else if (operatorStatus === "is-ready") {
+    //when total result is calcuated show operator once
     dispatch(operatorClickOnce(value));
   }
 };
@@ -174,6 +179,7 @@ export const computeEqualThunk = () => (dispatch, getState) => {
     result: { current },
     history
   } = selectCalculator(getState());
+  //when  operator has not been clicked calculate result
   if (operatorStatus === "is-not-clicked") {
     if (!current) return;
     dispatch(
@@ -185,6 +191,7 @@ export const computeEqualThunk = () => (dispatch, getState) => {
     operatorStatus === "is-clicked-once" ||
     operatorStatus === "is-clicked-again"
   ) {
+    //when  operator has been clicked once and above show recent result
     dispatch(resultDisplay(current));
   }
 };
