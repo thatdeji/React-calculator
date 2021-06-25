@@ -51,7 +51,8 @@ function Calculator() {
         <div className="display__container">
           <div className="history">{history}</div>
           <div className={"output " + outputFontType}>
-            {Number(output).toLocaleString("en")}
+            {/*{Number(output).toLocaleString("en")}*/}
+            {output}
           </div>
         </div>
       </div>

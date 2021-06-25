@@ -107,7 +107,9 @@ export const calculatorSlice = createSlice({
     outputDecimal: state => {
       const { output, decimal } = state;
       //adds decimal when is not added added
-      if (!decimal) return { ...state, output: `${output}.`, decimal: true };
+      if (String(output).indexOf(".") === -1)
+        return { ...state, output: `${output}.`, decimal: true };
+      // if (!decimal) return { ...state, output: `${output}.`, decimal: true };
       //adds nothing when decimal has been added to the output
       return state;
     },
