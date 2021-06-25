@@ -1,6 +1,10 @@
 .calculator {
   height: 100%;
 }
+.history,
+.display {
+  overflow: auto;
+}
 .display {
   height: 40%;
   padding: 40px;
