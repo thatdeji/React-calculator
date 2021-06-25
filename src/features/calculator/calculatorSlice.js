@@ -138,11 +138,7 @@ export const calculatorSlice = createSlice({
 });
 
 export const selectCalculator = state => state.calculator;
-export const selectPreciseOutput = state => {
-  const { output } = state.calcuator;
-  const newOutput = output === "" ? 0 : Number(state.calculator.output);
-  parseFloat(newOutput).toFixed(4);
-};
+export const selectOutput = state => state.calculator.output;
 export const selectHistory = state => state.calculator.history;
 
 export const {
