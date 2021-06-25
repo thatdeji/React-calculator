@@ -8,8 +8,8 @@ import {
   outputNegate,
   calculatorReset,
   outputDecimal,
-  computeOperatorValue,
-  computeEqual
+  computeOperatorThunk,
+  computeEqualThunk
 } from "./features/calculator/calculatorSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -24,10 +24,10 @@ function App() {
         dispatch(numberClick(value));
         break;
       case "operator":
-        dispatch(computeOperatorValue(value));
+        dispatch(computeOperatorThunk(value));
         break;
       case "equals":
-        dispatch(computeEqual());
+        dispatch(computeEqualThunk());
         break;
       case "negate":
         dispatch(outputNegate());

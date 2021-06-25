@@ -43,7 +43,6 @@ export const calculatorSlice = createSlice({
             nextIndex: result.nextIndex + 1
           }
         };
-      console.log("wahala");
       return {
         ...state,
         output: newOutput,
@@ -72,26 +71,12 @@ export const calculatorSlice = createSlice({
       };
     },
     resultEvaluate: (state, { payload }) => {
-      const { history, result } = state;
-      if (result.nextIndex === 0 && result.current === "") {
-        return {
-          ...state,
-          result: {
-            ...state.result,
-            current: history.substr(0, history.length - 1),
-            nextIndex: history.length - 1
-          }
-        };
-      }
+      const { history } = state;
       return {
         ...state,
         result: {
           ...state.result,
-          current: calculateByOperator([
-            result.current,
-            history[result.nextIndex],
-            history.slice(result.nextIndex + 1, history.length - 1)
-          ]),
+          current: payload,
           nextIndex: history.length - 1
         }
       };
@@ -152,13 +137,26 @@ export const {
   outputDecimal
 } = calculatorSlice.actions;
 
-export const computeOperatorValue = value => (dispatch, getState) => {
-  const { operatorStatus } = selectCalculator(getState());
+//Thunks
+
+export const computeOperatorThunk = value => (dispatch, getState) => {
+  const { operatorStatus, result: { current, nextIndex } } = selectCalculator(
+    getState()
+  );
   if (operatorStatus === "init") {
     return;
   } else if (operatorStatus === "is-not-clicked") {
     dispatch(operatorClickOnce(value));
-    dispatch(resultEvaluate());
+    const history = selectHistory(getState());
+    const resultEval =
+      !nextIndex && !current
+        ? history.substr(0, history.length - 1)
+        : calculateByOperator([
+            current,
+            history[nextIndex],
+            history.slice(nextIndex + 1, history.length - 1)
+          ]);
+    dispatch(resultEvaluate(resultEval));
   } else if (
     operatorStatus === "is-clicked-once" ||
     operatorStatus === "is-clicked-again"
@@ -169,26 +167,25 @@ export const computeOperatorValue = value => (dispatch, getState) => {
   }
 };
 
-export const computeEqual = () => (dispatch, getState) => {
-  const { operatorStatus, output, result, history } = selectCalculator(
-    getState()
-  );
+export const computeEqualThunk = () => (dispatch, getState) => {
+  const {
+    operatorStatus,
+    output,
+    result: { current },
+    history
+  } = selectCalculator(getState());
   if (operatorStatus === "is-not-clicked") {
-    if (result.current === "") return;
+    if (!current) return;
     dispatch(
       resultDisplay(
-        calculateByOperator([
-          result.current,
-          history[history.length - 1],
-          output
-        ])
+        calculateByOperator([current, history[history.length - 1], output])
       )
     );
   } else if (
     operatorStatus === "is-clicked-once" ||
     operatorStatus === "is-clicked-again"
   ) {
-    dispatch(resultDisplay(result.current));
+    dispatch(resultDisplay(current));
   }
 };
 
