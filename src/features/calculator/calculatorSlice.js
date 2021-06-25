@@ -18,7 +18,7 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     numberClick: (state, { payload }) => {
-      const { output, zero, operatorStatus } = state;
+      const { output, zero, operatorStatus, result } = state;
       const newOutput =
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
@@ -31,6 +31,19 @@ export const calculatorSlice = createSlice({
           operatorStatus: "is-not-clicked",
           zero: false
         };
+      if (operatorStatus === "is-ready")
+        return {
+          ...state,
+          output: output + payload,
+          operatorStatus: "is-ready",
+          zero: true,
+          result: {
+            ...state.result,
+            current: output + payload,
+            nextIndex: result.nextIndex + 1
+          }
+        };
+      console.log("wahala");
       return {
         ...state,
         output: newOutput,
@@ -87,7 +100,7 @@ export const calculatorSlice = createSlice({
       ...state,
       history: "",
       output: payload,
-      operatorStatus: "is-result-done",
+      operatorStatus: "is-ready",
       result: {
         ...state.result,
         current: payload,
@@ -95,10 +108,13 @@ export const calculatorSlice = createSlice({
       }
     }),
     outputNegate: state => {
-      const { output } = state;
+      const { output, result, operatorStatus } = state;
+      const newCurrent =
+        operatorStatus === "is-ready" ? -1 * result.current : result.current;
       return {
         ...state,
-        output: -1 * output
+        output: -1 * output,
+        result: { ...result, current: newCurrent }
       };
     },
     outputDecimal: state => {
@@ -157,7 +173,7 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         operatorStatus === "is-clicked-again"
       ) {
         dispatch(operatorClickAgain(value));
-      } else if (operatorStatus === "is-result-done") {
+      } else if (operatorStatus === "is-ready") {
         dispatch(operatorClickOnce(value));
       }
       break;
