@@ -15,8 +15,13 @@
   left: 20px;
 }
 .output {
-  font-size: 40px;
   font-weight: 600;
+}
+.output--lg {
+  font-size: 40px;
+}
+.output--md {
+  font-size: 20px;
 }
 .operators {
   height: 60%;

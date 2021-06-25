@@ -43,12 +43,14 @@ function Calculator() {
         return;
     }
   };
+  const outputFontType =
+    Number(output.length) >= 10 ? "output--md" : "output--lg";
   return (
     <div className="calculator">
       <div id="display" className="display">
         <div className="display__container">
           <div className="history">{history}</div>
-          <div className="output">{output}</div>
+          <div className={"output " + outputFontType}>{output}</div>
         </div>
       </div>
       <div className="operators">
