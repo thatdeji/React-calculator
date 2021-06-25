@@ -40,3 +40,7 @@
   grid-template-rows: repeat(5, 1fr);
   gap: 7px;
 }
+/*avoid :(*/
+#equals {
+  grid-column: 3/5;
+}
