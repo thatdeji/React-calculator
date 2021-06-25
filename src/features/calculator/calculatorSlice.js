@@ -45,8 +45,9 @@ export const calculatorSlice = createSlice({
         history: history + output + payload,
         operatorStatus: "is-clicked-once",
         operationReady: true,
-        decimal: true,
-        output: ""
+        decimal: false,
+        output: "",
+        zero: false
       };
     },
     operatorClickAgain: (state, { payload }) => {
@@ -114,15 +115,9 @@ export const calculatorSlice = createSlice({
         current: "",
         nextIndex: 0
       },
-      zero: false
-    }),
-    outputBackspace: state => {
-      let { output } = state;
-      output = String(output);
-      const newOutput =
-        output !== "" ? output.substring(0, output.length - 1) : output;
-      return { ...state, output: newOutput };
-    }
+      zero: false,
+      decimal: false
+    })
   }
 });
 
@@ -139,8 +134,7 @@ export const {
   resultDisplay,
   outputNegate,
   calculatorReset,
-  outputDecimal,
-  outputBackspace
+  outputDecimal
 } = calculatorSlice.actions;
 
 export const computeValues = (value, type) => (dispatch, getState) => {
@@ -195,9 +189,6 @@ export const computeValues = (value, type) => (dispatch, getState) => {
       break;
     case "decimal":
       dispatch(outputDecimal());
-      break;
-    case "backspace":
-      dispatch(outputBackspace());
       break;
     default:
       return;
