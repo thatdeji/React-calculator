@@ -10,13 +10,20 @@
 .toggle__track {
   width: 100%;
   position: absolute;
+}
+.toggle__mode {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.toggle__mode {
-  width: 10px;
-  height: 10px;
+.toggle__mode--light {
+  right: 1px;
+}
+.toggle__mode--dark {
+  left: 1px;
 }
 .toggle__thumb {
   position: absolute;
