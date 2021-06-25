@@ -56,7 +56,6 @@ export const calculatorSlice = createSlice({
         ...state,
         history: history + output + payload,
         operatorStatus: "is-clicked-once",
-        operationReady: true,
         decimal: false,
         output: "",
         zero: false
@@ -93,13 +92,12 @@ export const calculatorSlice = createSlice({
       }
     }),
     outputNegate: state => {
-      const { output, result, operatorStatus } = state;
-      const newCurrent =
-        operatorStatus === "is-ready" ? -1 * result.current : result.current;
+      const { output, result: { current }, operatorStatus } = state;
+      const newCurrent = operatorStatus === "is-ready" ? -1 * current : current;
       return {
         ...state,
         output: -1 * output,
-        result: { ...result, current: newCurrent }
+        result: { ...state.result, current: newCurrent }
       };
     },
     outputDecimal: state => {
