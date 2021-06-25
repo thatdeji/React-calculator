@@ -90,8 +90,8 @@ export const calculatorSlice = createSlice({
       operatorStatus: "is-result-done",
       result: {
         ...state.result,
-        current: payload
-        // nextIndex: 0
+        current: payload,
+        nextIndex: String(payload).length
       }
     }),
     outputNegate: state => {
