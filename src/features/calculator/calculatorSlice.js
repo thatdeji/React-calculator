@@ -9,8 +9,7 @@ const initialState = {
     current: "",
     nextIndex: 0
   },
-  zero: false,
-  decimal: false
+  zero: false
 };
 
 export const calculatorSlice = createSlice({
@@ -59,7 +58,6 @@ export const calculatorSlice = createSlice({
         ...state,
         history: history + output + payload,
         operatorStatus: "is-clicked-once",
-        decimal: false,
         output: "",
         zero: false
       };
@@ -105,11 +103,10 @@ export const calculatorSlice = createSlice({
       };
     },
     outputDecimal: state => {
-      const { output, decimal } = state;
-      //adds decimal when is not added added
+      const { output } = state;
+      //adds decimal if decimal is not in the output
       if (String(output).indexOf(".") === -1)
-        return { ...state, output: `${output}.`, decimal: true };
-      // if (!decimal) return { ...state, output: `${output}.`, decimal: true };
+        return { ...state, output: `${output}.` };
       //adds nothing when decimal has been added to the output
       return state;
     },
@@ -122,8 +119,7 @@ export const calculatorSlice = createSlice({
         current: "",
         nextIndex: 0
       },
-      zero: false,
-      decimal: false
+      zero: false
     })
   }
 });
