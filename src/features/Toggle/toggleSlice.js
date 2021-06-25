@@ -1,19 +1,19 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  toggle: false;
+  isToggled: false
 };
 
 const toggleSlice = createSlice({
-  name: 'toggle',
+  name: "toggle",
   initialState,
   reducers: {
-    toggleClick: (state) => ({...state, toggle: !state.toggle})
+    toggleClick: state => ({ ...state, toggle: !state.toggle })
   }
 });
 
-export const toggleSelector = state => state.toggle;
+export const selectToggle = state => state.toggle.isToggled;
 
-export const {toggleClick} = toggleSlice.actions;
+export const { toggleClick } = toggleSlice.actions;
 
 export default toggleSlice.reducer;
