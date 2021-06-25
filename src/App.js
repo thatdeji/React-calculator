@@ -4,7 +4,12 @@ import { buttons } from "./data/buttons";
 import {
   selectOutput,
   selectHistory,
-  computeValues
+  numberClick,
+  outputNegate,
+  calculatorReset,
+  outputDecimal,
+  computeOperatorValue,
+  computeEqual
 } from "./features/calculator/calculatorSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,7 +19,29 @@ function App() {
   const history = useSelector(selectHistory);
 
   const handleClick = (value, type) => {
-    dispatch(computeValues(value, type));
+    switch (type) {
+      case "number":
+        dispatch(numberClick(value));
+        break;
+      case "operator":
+        dispatch(computeOperatorValue(value));
+        break;
+      case "equals":
+        dispatch(computeEqual());
+        break;
+      case "negate":
+        dispatch(outputNegate());
+        break;
+      case "clear":
+        dispatch(calculatorReset());
+        break;
+      case "decimal":
+        dispatch(outputDecimal());
+        break;
+      default:
+        return;
+    }
+    // dispatch(computeValues(value, type));
   };
   return (
     <div className="App">

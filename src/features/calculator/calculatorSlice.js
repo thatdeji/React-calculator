@@ -153,7 +153,7 @@ export const {
   outputDecimal
 } = calculatorSlice.actions;
 
-export const computeOperatorValues = (value, type) => (dispatch, getState) => {
+export const computeOperatorValue = value => (dispatch, getState) => {
   const operatorStatus = selectOperatorStatus(getState());
   if (operatorStatus === "init") {
     return;
@@ -170,7 +170,9 @@ export const computeOperatorValues = (value, type) => (dispatch, getState) => {
   }
 };
 
-export const computeEqual = (value, type) => (dispatch, getState) => {
+export const computeEqual = () => (dispatch, getState) => {
+  const operatorStatus = selectOperatorStatus(getState());
+  const output = selectOutput(getState());
   const result = selectResult(getState());
   const history = selectHistory(getState());
   if (operatorStatus === "is-not-clicked") {
@@ -189,63 +191,6 @@ export const computeEqual = (value, type) => (dispatch, getState) => {
     operatorStatus === "is-clicked-again"
   ) {
     dispatch(resultDisplay(result.current));
-  }
-};
-
-export const computeValues = (value, type) => (dispatch, getState) => {
-  const operatorStatus = selectOperatorStatus(getState());
-  const result = selectResult(getState());
-  const history = selectHistory(getState());
-  const output = selectOutput(getState());
-  switch (type) {
-    case "number":
-      dispatch(numberClick(value));
-      break;
-    case "operator":
-      if (operatorStatus === "init") {
-        return;
-      } else if (operatorStatus === "is-not-clicked") {
-        dispatch(operatorClickOnce(value));
-        dispatch(resultEvaluate());
-      } else if (
-        operatorStatus === "is-clicked-once" ||
-        operatorStatus === "is-clicked-again"
-      ) {
-        dispatch(operatorClickAgain(value));
-      } else if (operatorStatus === "is-ready") {
-        dispatch(operatorClickOnce(value));
-      }
-      break;
-    case "equals":
-      if (operatorStatus === "is-not-clicked") {
-        if (result.current === "") return;
-        dispatch(
-          resultDisplay(
-            calculateByOperator([
-              result.current,
-              history[history.length - 1],
-              output
-            ])
-          )
-        );
-      } else if (
-        operatorStatus === "is-clicked-once" ||
-        operatorStatus === "is-clicked-again"
-      ) {
-        dispatch(resultDisplay(result.current));
-      }
-      break;
-    case "negate":
-      dispatch(outputNegate());
-      break;
-    case "clear":
-      dispatch(calculatorReset());
-      break;
-    case "decimal":
-      dispatch(outputDecimal());
-      break;
-    default:
-      return;
   }
 };
 
