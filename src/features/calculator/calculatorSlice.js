@@ -193,7 +193,6 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
       ) {
-        // return;
         dispatch(resultDisplay(result.current));
       }
       break;
