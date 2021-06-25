@@ -24,6 +24,7 @@ export const calculatorSlice = createSlice({
         operatorStatus === "is-clicked-again"
           ? payload
           : output + payload;
+      //case to avoid starting operation with more than one zero
       if (payload === "0" && zero === false)
         return {
           ...state,
@@ -31,6 +32,7 @@ export const calculatorSlice = createSlice({
           operatorStatus: "is-not-clicked",
           zero: false
         };
+      //concantenates output to result when result has been calculated
       if (operatorStatus === "is-ready")
         return {
           ...state,
@@ -43,6 +45,7 @@ export const calculatorSlice = createSlice({
             nextIndex: result.nextIndex + 1
           }
         };
+      //default display
       return {
         ...state,
         output: newOutput,
@@ -93,6 +96,7 @@ export const calculatorSlice = createSlice({
     }),
     outputNegate: state => {
       const { output, result: { current }, operatorStatus } = state;
+      //is result calculated? multiply current result by -1 else return current result
       const newCurrent = operatorStatus === "is-ready" ? -1 * current : current;
       return {
         ...state,
@@ -102,7 +106,9 @@ export const calculatorSlice = createSlice({
     },
     outputDecimal: state => {
       const { output, decimal } = state;
+      //adds decimal when is not added added
       if (!decimal) return { ...state, output: `${output}.`, decimal: true };
+      //adds nothing when decimal has been added to the output
       return state;
     },
     calculatorReset: state => ({
@@ -135,7 +141,7 @@ export const {
   outputDecimal
 } = calculatorSlice.actions;
 
-//Redux Thunks
+//Redux synchronous Thunks
 export const computeOperatorThunk = value => (dispatch, getState) => {
   const { operatorStatus, result: { current, nextIndex } } = selectCalculator(
     getState()
