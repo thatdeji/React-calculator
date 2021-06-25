@@ -8,7 +8,7 @@ const toggleSlice = createSlice({
   name: "toggle",
   initialState,
   reducers: {
-    toggleClick: state => ({ ...state, toggle: !state.toggle })
+    toggleClick: state => ({ ...state, isToggled: !state.isToggled })
   }
 });
 

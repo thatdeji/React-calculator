@@ -1,3 +1,4 @@
+import React from "react";
 import "./toggle.css";
 import { selectToggle, toggleClick } from "./toggleSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,14 +9,21 @@ const Toggle = () => {
   const handleToggleClick = () => {
     dispatch(toggleClick());
   };
+  const toggleStateStyle = toggleState ? " is-toggled" : "";
   return (
     <div className="toggle-container">
       <div onClick={handleToggleClick} className="toggle">
         <div className="toggle__track">
-          <div className="toggle__mode toggle__mode--dark">🌜</div>
-          <div className="toggle__mode toggle__mode--light">🌞</div>
+          <div className={"toggle__mode toggle__mode--dark" + toggleStateStyle}>
+            🌜
+          </div>
+          <div
+            className={"toggle__mode toggle__mode--light" + toggleStateStyle}
+          >
+            🌞
+          </div>
         </div>
-        <div className="toggle__thumb" />
+        <div className={"toggle__thumb" + toggleStateStyle} />
         <input
           type="checkbox"
           className="toggle__screen-readers"

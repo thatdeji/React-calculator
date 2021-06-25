@@ -34,10 +34,10 @@
   left: 1px;
   opacity: 1;
 }
-.toggle__mode--light.is-toggle-clicked {
+.toggle__mode--light.is-toggled {
   opacity: 1;
 }
-.toggle__mode--dark.is-toggle-clicked {
+.toggle__mode--dark.is-toggled {
   opacity: 0;
 }
 .toggle__thumb {
@@ -50,7 +50,7 @@
   transition: all 0.25s ease 0s;
   border: 1px solid rgb(77, 77, 77);
 }
-.toggle__thumb.is-toggle-clicked {
+.toggle__thumb.is-toggled {
   left: 1px;
 }
 .toggle__screen-readers {
