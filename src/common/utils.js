@@ -9,3 +9,9 @@ export const calculateByOperator = expression => {
   if (operator === "%") result = Number(operand1) % Number(operand2);
   return parseFloat(result.toFixed(5));
 };
+
+export const setRootVariables = variableArr => {
+  variableArr.forEach(item => {
+    document.querySelector(":root").style.setProperty(item.name, item.value);
+  });
+};
