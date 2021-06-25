@@ -9,7 +9,7 @@ const initialState = {
     current: "",
     nextIndex: 0
   },
-  negate: false,
+  zero: false,
   decimal: false
 };
 
@@ -18,16 +18,24 @@ export const calculatorSlice = createSlice({
   initialState,
   reducers: {
     numberClick: (state, { payload }) => {
-      const { output, operatorStatus } = state;
+      const { output, zero, operatorStatus } = state;
       const newOutput =
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
           ? payload
           : output + payload;
+      if (payload === "0" && zero === false)
+        return {
+          ...state,
+          output: "0",
+          operatorStatus: "is-not-clicked",
+          zero: false
+        };
       return {
         ...state,
         output: newOutput,
-        operatorStatus: "is-not-clicked"
+        operatorStatus: "is-not-clicked",
+        zero: true
       };
     },
     operatorClickOnce: (state, { payload }) => {
@@ -37,7 +45,8 @@ export const calculatorSlice = createSlice({
         history: history + output + payload,
         operatorStatus: "is-clicked-once",
         operationReady: true,
-        decimal: true
+        decimal: true,
+        output: ""
       };
     },
     operatorClickAgain: (state, { payload }) => {
@@ -50,7 +59,7 @@ export const calculatorSlice = createSlice({
     },
     resultEvaluate: (state, { payload }) => {
       const { history, result } = state;
-      if (result.nextIndex === 0) {
+      if (result.nextIndex === 0 && result.current === "") {
         return {
           ...state,
           result: {
@@ -80,16 +89,16 @@ export const calculatorSlice = createSlice({
       operatorStatus: "is-result-done",
       result: {
         ...state.result,
-        current: payload,
-        nextIndex: 0
+        current: payload
+        // nextIndex: 0
       }
     }),
     outputNegate: state => {
-      const { output, negate } = state;
-      const newOutput = negate
-        ? `${output.substring(1, output.length)}`
-        : `-${output}`;
-      return { ...state, output: newOutput, negate: !negate };
+      const { output } = state;
+      return {
+        ...state,
+        output: -1 * output
+      };
     },
     outputDecimal: state => {
       const { output, decimal } = state;
@@ -105,7 +114,7 @@ export const calculatorSlice = createSlice({
         current: "",
         nextIndex: 0
       },
-      negate: false
+      zero: false
     }),
     outputBackspace: state => {
       let { output } = state;
@@ -155,7 +164,6 @@ export const computeValues = (value, type) => (dispatch, getState) => {
       ) {
         dispatch(operatorClickAgain(value));
       } else if (operatorStatus === "is-result-done") {
-        console.log("done");
         dispatch(operatorClickOnce(value));
       }
       break;
@@ -175,6 +183,7 @@ export const computeValues = (value, type) => (dispatch, getState) => {
         operatorStatus === "is-clicked-once" ||
         operatorStatus === "is-clicked-again"
       ) {
+        return;
         dispatch(resultDisplay(result.current));
       }
       break;
