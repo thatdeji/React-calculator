@@ -1,3 +1,5 @@
+import "./toggle.css";
+
 const Toggle = () => {
   return (
     <div className="toggle">
@@ -6,6 +8,11 @@ const Toggle = () => {
         <div className="toggle__mode toggle__mode--light">🌞</div>
       </div>
       <div className="toggle__thumb" />
+      <input
+        type="checkbox"
+        className="toggle__screen-readers"
+        aria-label="Toggle between light and dark mode"
+      />
     </div>
   );
 };
