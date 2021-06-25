@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { calculateByOperator } from "../../utils";
+import { calculateByOperator } from "../../common/utils";
 
 const initialState = {
   history: "",
@@ -113,6 +113,7 @@ export const calculatorSlice = createSlice({
     outputBackspace: state => {
       const { output } = state;
       const newOutput = String(output);
+      //takes the output excluding it's new output as the new one
       return {
         ...state,
         output: newOutput.substr(0, newOutput.length - 1)

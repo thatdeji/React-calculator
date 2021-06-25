@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../components/Button";
+import Button from "../../common/components/Button";
 import { buttons } from "../../data/buttons";
 import {
   selectOutput,
@@ -42,6 +42,7 @@ function Calculator() {
         break;
       case "backspace":
         dispatch(outputBackspace());
+        break;
       default:
         return;
     }
