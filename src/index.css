@@ -49,3 +49,8 @@ body {
   border-radius: 20px;
   background-color: var(--calculator-bg);
 }
+@media screen and (max-width: 270px) {
+  .calculator-container {
+    width: 200px;
+  }
+}
