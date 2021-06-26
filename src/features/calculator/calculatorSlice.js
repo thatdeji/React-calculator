@@ -32,11 +32,11 @@ export const calculatorSlice = createSlice({
           zero: false
         };
       //concantenates output to result when result has been calculated
-      if (operatorStatus === "is-ready")
+      if (operatorStatus === "is-equals-clicked")
         return {
           ...state,
           output: output + payload,
-          operatorStatus: "is-ready",
+          operatorStatus: "is-equals-clicked",
           zero: true,
           result: {
             ...state.result,
@@ -85,7 +85,7 @@ export const calculatorSlice = createSlice({
       ...state,
       history: "",
       output: payload,
-      operatorStatus: "is-ready",
+      operatorStatus: "is-equals-clicked",
       result: {
         ...state.result,
         current: payload,
@@ -95,7 +95,7 @@ export const calculatorSlice = createSlice({
     negateClick: state => {
       const { output, result: { current }, operatorStatus } = state;
       //is result calculated? multiply current result by -1 else return current result
-      const newCurrent = operatorStatus === "is-ready" ? -1 * current : current;
+      const newCurrent = operatorStatus === "is-equals-clicked" ? -1 * current : current;
       return {
         ...state,
         output: -1 * output,
@@ -178,7 +178,7 @@ export const computeOperatorThunk = value => (dispatch, getState) => {
   ) {
     //update previous operator when clicked once and above
     dispatch(operatorClickAgain(value));
-  } else if (operatorStatus === "is-ready") {
+  } else if (operatorStatus === "is-equals-clicked") {
     //when total result is calcuated show operator once
     dispatch(operatorClickOnce(value));
   }
