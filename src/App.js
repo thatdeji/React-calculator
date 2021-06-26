@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Calculator from "./features/calculator/Calculator";
-import Toggle from "./features/Toggle/Toggle";
+import Toggle from "./features/toggle/Toggle";
 import { selectToggle } from "./features/toggle/toggleSlice";
 import { useSelector } from "react-redux";
 import { variablesLightMode, variablesDarkMode } from "./data/variables";
